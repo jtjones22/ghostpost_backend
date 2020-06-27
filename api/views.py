@@ -10,8 +10,9 @@ from api.models import PostItem
 class PostItemViewSet(ModelViewSet):
     serializer_class = PostItemSerializer
     queryset = PostItem.objects.all()
+    queryset = queryset.order_by('-submission_time')
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['GET'])
     def upvote(self, request, pk=None):
         post = self.get_object()
         post.upvotes += 1
@@ -19,7 +20,7 @@ class PostItemViewSet(ModelViewSet):
         post.save()
         return Response({'status': 'upvote'})
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['GET'])
     def downvote(self, request, pk=None):
         post = self.get_object()
         post.downvotes += 1
@@ -32,7 +33,7 @@ class PostItemViewSet(ModelViewSet):
         qs = PostItem.objects.filter(category_choice='boast').values()
         return Response({'boasts': list(qs)})
 
-    @action(detail=False)
+    @action(detail=False, methods=['GET'])
     def roasts(self, request, pk=None):
         qs = PostItem.objects.filter(category_choice='roast').values()
         return Response({'roasts': list(qs)})
@@ -40,4 +41,7 @@ class PostItemViewSet(ModelViewSet):
     @action(detail=False)
     def vote_score(self, request, pk=None):
         qs = PostItem.objects.all().order_by('-vote_score').values()
-        return Response({'Vote Score': qs})
+        return Response({'vote_score': qs})
+
+    # @action(detail=True, methods=['delete'])
+    # def delete_

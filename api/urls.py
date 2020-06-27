@@ -8,5 +8,5 @@ router = routers.DefaultRouter()
 router.register(r"PostItem", PostItemViewSet)
 
 urlpatterns = [
-    url(r'^api/', include(router.urls))
+    url(r'^api/', include(router.urls)),
 ]
